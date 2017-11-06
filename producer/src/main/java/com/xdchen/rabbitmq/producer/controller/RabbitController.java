@@ -1,5 +1,6 @@
 package com.xdchen.rabbitmq.producer.controller;
 
+import com.xdchen.rabbitmq.producer.service.MQProducer;
 import com.xdchen.rabbitmq.producer.service.RabbitServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +18,22 @@ public class RabbitController {
     @Autowired
     private RabbitServiceImpl rabbitService;
 
+    @Autowired
+    private MQProducer mqProducer;
+
     @RequestMapping(value = "/setMessage", method = RequestMethod.POST)
     @ResponseBody
     public String setMessage(String msg, String type) {
         log.info("rabbitmq--收到待发送消息: type[{}]-msg[{}]", type, msg);
         rabbitService.setMessage(msg, type);
+        return "{\"success\":1}";
+    }
+
+    @RequestMapping(value = "/setMessage2", method = RequestMethod.GET)
+    @ResponseBody
+    public String setMessage2(String msg) {
+        log.info("rabbitmq--收到待发送消息: msg[{}]", msg);
+        mqProducer.sendDataToQueue("test_queue_key", msg);
         return "{\"success\":1}";
     }
 }

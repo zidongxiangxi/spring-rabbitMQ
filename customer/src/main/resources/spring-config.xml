@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
-       xsi:schemaLocation="
-          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-    	  http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.5.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    	  http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.5.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!-- ========================================RabbitMQ========================================= -->
-    <!-- 连接工厂 -->
-    <rabbit:connection-factory id="connectionFactory" host="192.168.0.246" publisher-confirms="true" virtual-host="/" username="user" password="123456" />
-    <!-- 监听器 -->
-    <rabbit:listener-container connection-factory="connectionFactory">
-        <!-- queues是队列名称，可填多个，用逗号隔开， method是ref指定的Bean调用Invoke方法执行的方法名称 -->
-        <rabbit:listener queues="red" method="onMessage" ref="redQueueListener" />
-        <rabbit:listener queues="blue" method="onMessage" ref="blueQueueListener" />
-    </rabbit:listener-container>
-    <!-- 队列声明 -->
-    <rabbit:queue name="red" durable="true" />
-    <!-- 队列声明 -->
-    <rabbit:queue name="blue" durable="true" />
-    <!-- 红色监听处理器 -->
-    <bean id="redQueueListener" class="com.xdchen.rabbitmq.customer.listener.RedQueueListener" />
-    <!-- 颜色监听处理器 -->
-    <bean id="blueQueueListener" class="com.xdchen.rabbitmq.customer.listener.BlueQueueListener" />
+    <context:component-scan base-package="com.xdchen.rabbitmq.customer"/>
 
+    <!--&lt;!&ndash; ========================================RabbitMQ========================================= &ndash;&gt;-->
+    <!--&lt;!&ndash; 连接工厂 &ndash;&gt;-->
+    <!--<rabbit:connection-factory id="connectionFactory" host="192.168.0.246" publisher-confirms="true" virtual-host="/" username="user" password="123456" />-->
+    <!--&lt;!&ndash; 监听器 &ndash;&gt;-->
+    <!--<rabbit:listener-container connection-factory="connectionFactory">-->
+        <!--&lt;!&ndash; queues是队列名称，可填多个，用逗号隔开， method是ref指定的Bean调用Invoke方法执行的方法名称 &ndash;&gt;-->
+        <!--<rabbit:listener queues="red" method="onMessage" ref="redQueueListener" />-->
+        <!--<rabbit:listener queues="blue" method="onMessage" ref="blueQueueListener" />-->
+    <!--</rabbit:listener-container>-->
+    <!--&lt;!&ndash; 队列声明 &ndash;&gt;-->
+    <!--<rabbit:queue name="red" durable="true" />-->
+    <!--&lt;!&ndash; 队列声明 &ndash;&gt;-->
+    <!--<rabbit:queue name="blue" durable="true" />-->
+    <!--&lt;!&ndash; 红色监听处理器 &ndash;&gt;-->
+    <!--<bean id="redQueueListener" class="com.xdchen.rabbitmq.customer.listener.RedQueueListener" />-->
+    <!--&lt;!&ndash; 颜色监听处理器 &ndash;&gt;-->
+    <!--<bean id="blueQueueListener" class="com.xdchen.rabbitmq.customer.listener.BlueQueueListener" />-->
+
+    <import resource="classpath:spring-rabbitmq.xml"/>
 </beans>
